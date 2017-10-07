@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-//NEW IMPORTS 
+//NEW IMPORTS
 // To make this component work we need to 'connect' it with our top level redux store
 import { connect } from 'react-redux'
-import { updateName, addPerson } from './reducer'
+import { updateName, addPerson, updateExcitementLevel } from './ActionCreators'
 
 class App extends Component {
   render() {
-    let { name, people } = this.props; //We can type this.props a lot less if we do this.
+    let { name, people, markExcitementLevel } = this.props; //We can type this.props a lot less if we do this.
 
     //We got people from props, which came from mapStateToProps, which came from Redux
     let peopleRender = people.map((person) => (
@@ -20,10 +20,14 @@ class App extends Component {
 
     return (
       <div className="App">
+        <h1>Mark is this excited: {this.props.markExcitementLevel}</h1>
+        <button onClick ={() =>
+          this.props.updateExcitementLevel(this.props.markExcitementLevel)}
+          >Found Mark a New House To buy</button>
         <p>
           <h4>{name}</h4>
           <input type="text" ref="name"/>
-          <button onClick={()=> this.props.updateName(this.refs.name.value)}>Update</button>    
+          <button onClick={()=> this.props.updateName(this.refs.name.value)}>Update</button>
         </p>
         <p>
           <h4>New Person</h4>
@@ -44,11 +48,11 @@ class App extends Component {
 }
 
 //Input function to get data from state
-function moveFromStoreToProps(state) {
+function mapStateToProps(state) {
   //state refers to the redux state
   if(!state) return {};
 
-  let {people, name} = state;
+  let {people, name, markExcitementLevel} = state;
 
   // return { //This object gets mashed/merged into this.props
   //   people,
@@ -56,7 +60,8 @@ function moveFromStoreToProps(state) {
   // }
   return { //This object gets mashed/merged into this.props
     people: people,
-    name: name
+    name: name,
+    markExcitementLevel: markExcitementLevel
   }
 }
 
@@ -65,12 +70,13 @@ function moveFromStoreToProps(state) {
 // We need to import any actions we want to send through the process
 // We importeded these up above with this line of code :
 // import {updateAge, addPerson} from './reducer'
-let outputActions = {
+let mapDispatchToProps = {
   updateName: updateName,
-  addPerson: addPerson
+  addPerson: addPerson,
+  updateExcitementLevel: updateExcitementLevel
 }
 
-let reduxInsAndOuts = connect(moveFromStoreToProps, outputActions)
+let reduxInsAndOuts = connect(mapStateToProps, mapDispatchToProps)
 export default reduxInsAndOuts(App);
 //This is often done in a single line of code like this:
 //connect(mapStateToProps, outputActions)(App)

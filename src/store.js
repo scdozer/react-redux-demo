@@ -1,7 +1,10 @@
 import { createStore } from 'redux'; //Notice redux, not react-redux
 import reducer from './reducer';
 
-let store = createStore(reducer);
+let store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default store; //The store is used in index.js by the react-redux top level provider
 
@@ -18,7 +21,3 @@ export default store; //The store is used in index.js by the react-redux top lev
 // let store = createStoreWithMiddleware(reducer);
 
 // export default store; //The store is used in index.js by the react-redux top level provider
-
-
-
-
